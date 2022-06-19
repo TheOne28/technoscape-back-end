@@ -66,32 +66,22 @@ const tabunganPatchHandler = async function(req, res){
         return
     }
 
-    const found = Tabungan.findOne({email: email, nama: nama})
+    const newTabungan = Tabungan({
+        email,
+        nama,
+        target,
+        uangSekarang,
+    })
 
-    if(found.size() === 0){
-        res.json({
-            message: 'Error Data Not Found',
-            data: {},
-        }).status(400)
-        return
-    }
-
-    if(target){
-        found.target = target
-    }
-
-    if(uangSekarang){
-        found.uangSekarang = uangSekarang
-    }
-
-    await found.save().then((r) => {
+    const found = Tabungan.findOneandUpdate({email: email, nama: nama}, newTabungan)
+    .then((r) => {
         res.json({
             message: 'Success',
             data: found
         }).status(200)
     }).catch((err) => {
         res.json({
-            message: 'Error: ', e,
+            message: `Error: ${err}`,
             data: {}
         }).status(400);
     });

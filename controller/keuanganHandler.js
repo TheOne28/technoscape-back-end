@@ -1,5 +1,4 @@
-const Keuangan = require('../controller/')
-const { validate } = require('../model/tabungan.model')
+const Keuangan = require('../model/infoKeuangan.model')
 
 function validateTipe(tipe){
     return tipe !== 'pengeluaran' || tipe !== 'pendapatan'
@@ -36,7 +35,7 @@ const keuanganPostHandler = async function(req, res){
         }).status(400);
     }
 
-    const newKeuangan = keuangan({
+    const newKeuangan = Keuangan({
         email,
         deskripsi,
         biaya,
@@ -66,6 +65,10 @@ const keuanganPatchHandler = async function(req, res){
     const tipe = req.body.tipe
     const biaya = req.body.biaya
 
+
+    console.log(typeof email)
+    console.log(deskripsi)
+
     if(!validateTipe(tipe)){
         res.json({
             message: 'Error Request',
@@ -74,39 +77,28 @@ const keuanganPatchHandler = async function(req, res){
         return
     }
 
-    const found = keuangan.findOne({email: email, deskripsi: deskripsi})
-
-    if(found.size() === 0){
-        res.json({
-            message: 'Error Data Not Found',
-            data: {},
-        }).status(400)
-        return
+    const newKeuangan = {
+        email: email,
+        deskripsi: deskripsi,
+        tanggal: tanggal,
+        tipe: tipe,
+        biaya: biaya
     }
 
-    if(tanggal){
-        found.tanggal = tanggal
-    }
-
-    if(tipe){
-        found.tipe = tipe
-    }
-
-    if(biaya){
-        found.biaya = biaya
-    }
-
-    await found.save().then((r) => {
+    const found = Keuangan.findOneAndUpdate({email: email, deskripsi: deskripsi}, newKeuangan)
+    .then((r) => {
         res.json({
             message: 'Success',
             data: found
         }).status(200)
     }).catch((err) => {
         res.json({
-            message: 'Error: ', e,
+            message: `Error: ${err} `,
             data: {}
         }).status(400);
     });
+
+
 }
 
 const keuanganDeleteHandler = async function(req, res){
@@ -114,7 +106,7 @@ const keuanganDeleteHandler = async function(req, res){
     const deskripsi = req.body.deskripsi
 
     try{
-        await keuangan.deleteOne({
+        await Keuangan.deleteOne({
             email: email,
             deskripsi: deskripsi,
         }).then((r) =>{

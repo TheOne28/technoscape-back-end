@@ -11,6 +11,7 @@ const app = express();
 const port = process.env.PORT || 3001
 
 const uri = process.env.ATLAS_URI
+console.log(uri)
 
 //Setup mongo connection
 mongoose.connect(uri, { 
@@ -34,6 +35,17 @@ app.get('/', (req, res) =>{
     console.log("Success get")
     console.log(req.email)
 })
+
+const keuanganRouter = require('./routes/keuanganRoute')
+const kredensialRouter = require('./routes/kredensialRoute')
+const tabunganRouter = require('./routes/tabunganRoute')
+const anggaranRouter = require('./routes/anggaranRoute')
+
+app.use('/keuangan', keuanganRouter)
+app.use('/kredensial', kredensialRouter)
+app.use('/tabungan', tabunganRouter)
+app.use('/anggaran', anggaranRouter)
+
 
 
 app.listen(port, () => {

@@ -69,36 +69,23 @@ const anggaranPatchHandler = async function(req, res){
         return
     }
 
-    const found = anggaran.findOne({email: email, tujuan: tujuan})
+    const newAnggaran = Anggaran({
+        email,
+        tujuan,
+        target,
+        durasiJenis,
+        durasi,
+    })
 
-    if(found.size() === 0){
-        res.json({
-            message: 'Error Data Not Found',
-            data: {},
-        }).status(400)
-        return
-    }
-
-    if(target){
-        found.target = target
-    }
-
-    if(durasiJenis){
-        found.durasiJenis = durasiJenis
-    }
-
-    if(durasi){
-        found.durasi = durasi
-    }
-
-    await found.save().then((r) => {
+    const found = anggaran.findOneAndUpdate({email: email, tujuan: tujuan}, newAnggaran)
+    .then((r) => {
         res.json({
             message: 'Success',
             data: found
         }).status(200)
     }).catch((err) => {
         res.json({
-            message: 'Error: ', e,
+            message: `Error: ${err}`,
             data: {}
         }).status(400);
     });
