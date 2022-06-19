@@ -1,8 +1,9 @@
 const router = require('express').Router()
+const kredensialController = require('../controller/kredensialHandler')
 
-router.get('/kredensial')
+router.get('/kredensial', kredensialController.kredensialGetHandler)
 
-router.post('/kredensial')
+router.post('/kredensial', kredensialController.kredensialPostHandler)
 
 
 

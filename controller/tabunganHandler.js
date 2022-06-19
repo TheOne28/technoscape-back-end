@@ -15,7 +15,6 @@ const tabunganGetHandler = async function(req, res){
             data: {}
         }).status(400)
     }
-        
 }
 
 const tabunganPostHandler = async function(req, res){
