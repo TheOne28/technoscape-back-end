@@ -1,12 +1,13 @@
 const router = require('express').Router()
+const keuanganController = require('../controller/keuanganHandler')
 
-router.get('/keuangan')
+router.get('/keuangan', keuanganController.keuanganGetHandler)
 
-router.put('/keuangan')
+router.patch('/keuangan', keuanganController.keuanganPatchHandler)
 
-router.post('/keuangan')
+router.post('/keuangan', keuanganController.keuanganPostHandler)
 
-router.delete('/keuangan')
+router.delete('/keuangan', keuanganController.keuanganDeleteHandler)
 
 
 module.exports = router

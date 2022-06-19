@@ -3,8 +3,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const infoKeuanganSchema = new Schema({
+    email:{
+        type: String,
+        required: true,
+    },
     deskripsi: {
         type: String, 
+        required: true,
         default: ""
     },
     biaya: {
